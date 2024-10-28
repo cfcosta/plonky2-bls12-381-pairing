@@ -110,7 +110,7 @@ mod tests {
 
     #[test]
     fn test_miller_loop_circuit() {
-        let config = CircuitConfig::pairing_config();
+        let config = CircuitConfig::standard_recursion_config();
         let mut builder = CircuitBuilder::<F, D>::new(config);
         let rng = &mut rand::thread_rng();
         let p = G1Affine::rand(rng);
@@ -134,7 +134,7 @@ mod tests {
 
     #[test]
     fn test_ell_target() {
-        let config = CircuitConfig::pairing_config();
+        let config = CircuitConfig::standard_recursion_config();
         let mut builder = CircuitBuilder::<F, D>::new(config);
         let rng = &mut rand::thread_rng();
         let p = G1Affine::rand(rng);

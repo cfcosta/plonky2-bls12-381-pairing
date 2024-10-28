@@ -300,7 +300,7 @@ struct FqSqrtGenerator<F: RichField + Extendable<D>, const D: usize> {
     sqrt: FqTarget<F, D>,
 }
 
-impl<F: RichField + Extendable<D>, const D: usize> SimpleGenerator<F> for FqSqrtGenerator<F, D> {
+impl<F: RichField + Extendable<D>, const D: usize> SimpleGenerator<F, D> for FqSqrtGenerator<F, D> {
     fn dependencies(&self) -> Vec<Target> {
         let mut x_vec = self.x.target.value.limbs.iter().map(|&l| l.0).collect_vec();
         x_vec.push(self.sgn.target);
@@ -326,11 +326,22 @@ impl<F: RichField + Extendable<D>, const D: usize> SimpleGenerator<F> for FqSqrt
         "FqSqrtGenerator".to_string()
     }
 
-    fn serialize(&self, _: &mut Vec<u8>) -> Result<(), IoError> {
-        unimplemented!()
+    fn serialize(
+        &self,
+        _dst: &mut Vec<u8>,
+        _common_data: &plonky2::plonk::circuit_data::CommonCircuitData<F, D>,
+    ) -> plonky2::util::serialization::IoResult<()> {
+        todo!()
     }
-    fn deserialize(_: &mut Buffer) -> Result<Self, IoError> {
-        unimplemented!()
+
+    fn deserialize(
+        _src: &mut Buffer,
+        _common_data: &plonky2::plonk::circuit_data::CommonCircuitData<F, D>,
+    ) -> plonky2::util::serialization::IoResult<Self>
+    where
+        Self: Sized,
+    {
+        todo!()
     }
 }
 
@@ -363,7 +374,7 @@ mod tests {
     fn test_from_to_vec() {
         let rng = &mut rand::thread_rng();
         let a = Fq::rand(rng);
-        let config = CircuitConfig::pairing_config();
+        let config = CircuitConfig::standard_recursion_config();
         let mut builder = CircuitBuilder::<F, D>::new(config);
         let a_t = FqTarget::constant(&mut builder, a);
 
@@ -384,7 +395,7 @@ mod tests {
         let b = Fq::rand(rng);
         let c_expected = a * b;
 
-        let config = CircuitConfig::pairing_config();
+        let config = CircuitConfig::standard_recursion_config();
         let mut builder = CircuitBuilder::<F, D>::new(config);
         let a_t = FqTarget::constant(&mut builder, a);
         let b_t = FqTarget::constant(&mut builder, b);
@@ -404,7 +415,7 @@ mod tests {
         let a = Fq::rand(rng);
         let b = Fq::rand(rng);
 
-        let config = CircuitConfig::pairing_config();
+        let config = CircuitConfig::standard_recursion_config();
         let mut builder = CircuitBuilder::<F, D>::new(config);
         let a_t = FqTarget::constant(&mut builder, a);
         let b_t = FqTarget::constant(&mut builder, b);
@@ -427,7 +438,7 @@ mod tests {
     fn test_is_zero() {
         let zero = Fq::zero();
         let non_zero = Fq::rand(&mut rand::thread_rng());
-        let config = CircuitConfig::pairing_config();
+        let config = CircuitConfig::standard_recursion_config();
         let mut builder = CircuitBuilder::<F, D>::new(config);
         let zero_t = FqTarget::constant(&mut builder, zero);
         let is_zero = zero_t.is_zero(&mut builder);
@@ -448,7 +459,7 @@ mod tests {
         let a = Fq::from(5);
         let b = Fq::from(6);
 
-        let config = CircuitConfig::pairing_config();
+        let config = CircuitConfig::standard_recursion_config();
         let mut builder = CircuitBuilder::<F, D>::new(config);
 
         let a_t = FqTarget::constant(&mut builder, a);
@@ -471,7 +482,7 @@ mod tests {
         let a_is_sq_expected: bool = a.legendre().is_qr();
         dbg!(a_is_sq_expected);
 
-        let config = CircuitConfig::pairing_config();
+        let config = CircuitConfig::standard_recursion_config();
         let mut builder = CircuitBuilder::<F, D>::new(config);
 
         let a_t = FqTarget::constant(&mut builder, a);
@@ -503,7 +514,7 @@ mod tests {
         assert_eq!(expected_sqrt * expected_sqrt, a);
         assert_eq!(sgn0_fq(expected_sqrt), sgn);
 
-        let config = CircuitConfig::pairing_config();
+        let config = CircuitConfig::standard_recursion_config();
         let mut builder = CircuitBuilder::<F, D>::new(config);
         let a_t = FqTarget::constant(&mut builder, a);
         let sgn_t = builder.constant_bool(sgn);

@@ -2,7 +2,7 @@ use ark_bls12_381::{Fq, Fq12, Fq2, G1Affine, G2Affine};
 use ark_ec::short_weierstrass::SWCurveConfig;
 use ark_ec::AffineRepr;
 use ark_ff::vec::IntoIter;
-use ark_ff::UniformRand;
+use ark_ff::{AdditiveGroup, UniformRand};
 use ark_ff::{BitIteratorBE, Field};
 use ark_std::cfg_chunks_mut;
 use ark_std::One;
@@ -94,11 +94,11 @@ impl From<G2Affine> for G2Prepared {
             ell_coeffs: vec![],
             infinity: true,
         };
-        q.xy().map_or(zero, |(q_x, q_y)| {
+        q.xy().map_or(zero, |(x, y)| {
             let mut ell_coeffs = vec![];
             let mut r = G2Projective {
-                x: *q_x,
-                y: *q_y,
+                x,
+                y,
                 z: Fq2::one(),
             };
 

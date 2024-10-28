@@ -360,7 +360,7 @@ struct Fq12InverseGenerator<F: RichField + Extendable<D>, const D: usize> {
     inv: Fq12Target<F, D>,
 }
 
-impl<F: RichField + Extendable<D>, const D: usize> SimpleGenerator<F>
+impl<F: RichField + Extendable<D>, const D: usize> SimpleGenerator<F, D>
     for Fq12InverseGenerator<F, D>
 {
     fn dependencies(&self) -> Vec<Target> {
@@ -400,11 +400,22 @@ impl<F: RichField + Extendable<D>, const D: usize> SimpleGenerator<F>
         "Fq12InverseGenerator".to_string()
     }
 
-    fn serialize(&self, _: &mut Vec<u8>) -> Result<(), IoError> {
-        unimplemented!()
+    fn serialize(
+        &self,
+        _dst: &mut Vec<u8>,
+        _common_data: &plonky2::plonk::circuit_data::CommonCircuitData<F, D>,
+    ) -> plonky2::util::serialization::IoResult<()> {
+        todo!()
     }
-    fn deserialize(_: &mut Buffer) -> Result<Self, IoError> {
-        unimplemented!()
+
+    fn deserialize(
+        _src: &mut Buffer,
+        _common_data: &plonky2::plonk::circuit_data::CommonCircuitData<F, D>,
+    ) -> plonky2::util::serialization::IoResult<Self>
+    where
+        Self: Sized,
+    {
+        todo!()
     }
 }
 
@@ -466,7 +477,7 @@ mod tests {
     fn test_from_to_vec() {
         let rng = &mut rand::thread_rng();
         let a = Fq12::rand(rng);
-        let config = CircuitConfig::pairing_config();
+        let config = CircuitConfig::standard_recursion_config();
         let mut builder = CircuitBuilder::<F, D>::new(config);
         let a_t = Fq12Target::constant(&mut builder, a);
 
@@ -496,7 +507,7 @@ mod tests {
         let b = Fq12::rand(rng);
         let c_expected = a * b;
 
-        let config = CircuitConfig::pairing_config();
+        let config = CircuitConfig::standard_recursion_config();
         let mut builder = CircuitBuilder::<F, D>::new(config);
         let a_t = Fq12Target::constant(&mut builder, a);
         let b_t = Fq12Target::constant(&mut builder, b);
@@ -516,7 +527,7 @@ mod tests {
         let x: Fq12 = Fq12::rand(rng);
         let inv_x_expected = x.inverse().unwrap();
 
-        let config = CircuitConfig::pairing_config();
+        let config = CircuitConfig::standard_recursion_config();
         let mut builder = CircuitBuilder::<F, D>::new(config);
         let x_t = Fq12Target::constant(&mut builder, x);
         let inv_x_t = x_t.inv(&mut builder);
@@ -536,7 +547,7 @@ mod tests {
         let c0: Fq2 = Fq2::rand(rng);
         let c1: Fq2 = Fq2::rand(rng);
         let c4: Fq2 = Fq2::rand(rng);
-        let config = CircuitConfig::pairing_config();
+        let config = CircuitConfig::standard_recursion_config();
         let mut builder = CircuitBuilder::<F, D>::new(config);
         let c0_t = Fq2Target::constant(&mut builder, c0);
         let c1_t = Fq2Target::constant(&mut builder, c1);
@@ -560,7 +571,7 @@ mod tests {
         let rng = &mut rand::thread_rng();
         let x: Fq12 = Fq12::rand(rng);
 
-        let config = CircuitConfig::pairing_config();
+        let config = CircuitConfig::standard_recursion_config();
         let mut builder = CircuitBuilder::<F, D>::new(config);
         let c0 = Fq6Target::constant(&mut builder, x.c0);
         let c1 = Fq6Target::constant(&mut builder, x.c1);
@@ -578,7 +589,7 @@ mod tests {
     fn test_convert_to_fq6() {
         let rng = &mut rand::thread_rng();
         let x: Fq12 = Fq12::rand(rng);
-        let config = CircuitConfig::pairing_config();
+        let config = CircuitConfig::standard_recursion_config();
         let mut builder = CircuitBuilder::<F, D>::new(config);
 
         let r_t = Fq12Target::constant(&mut builder, x);
@@ -599,7 +610,7 @@ mod tests {
     fn test_conjugate() {
         let rng = &mut rand::thread_rng();
         let x: Fq12 = Fq12::rand(rng);
-        let config = CircuitConfig::pairing_config();
+        let config = CircuitConfig::standard_recursion_config();
         let mut builder = CircuitBuilder::<F, D>::new(config);
         let x_t = Fq12Target::constant(&mut builder, x);
 
@@ -620,7 +631,7 @@ mod tests {
         let x: Fq12 = Fq12::rand(rng);
         let y: Fq12 = Fq12::rand(rng);
         let z: Fq12 = Fq12::rand(rng);
-        let config = CircuitConfig::pairing_config();
+        let config = CircuitConfig::standard_recursion_config();
         let mut builder = CircuitBuilder::<F, D>::new(config);
         let x_t = Fq12Target::constant(&mut builder, x);
         let y_t = Fq12Target::constant(&mut builder, y);

@@ -204,7 +204,7 @@ mod tests {
 
     #[test]
     fn test_g2_projective_double_in_place() {
-        let config = CircuitConfig::pairing_config();
+        let config = CircuitConfig::standard_recursion_config();
         let mut builder = CircuitBuilder::<F, D>::new(config);
         let rng = &mut rand::thread_rng();
         let rand_g1_affine = G1Affine::rand(rng);
@@ -228,7 +228,7 @@ mod tests {
 
     #[test]
     fn test_g2_projective_add_in_place() {
-        let config = CircuitConfig::pairing_config();
+        let config = CircuitConfig::standard_recursion_config();
         let mut builder = CircuitBuilder::<F, D>::new(config);
         let rng = &mut rand::thread_rng();
         let rand_g2_affine = G2Affine::rand(rng);
