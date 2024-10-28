@@ -1,8 +1,8 @@
-use crate::utils::{constants::BLS_X, helpers::MyFq12};
 use ark_bls12_381::Fq12;
 use ark_ff::{CyclotomicMultSubgroup, Field};
 
 use super::fin_exp_helpers::{conjugate_fp12, frobenius_map_native, pow_native};
+use crate::utils::{constants::BLS_X, helpers::MyFq12};
 
 // out = in^{ (q^6 - 1)*(q^2 + 1) }
 pub fn easy_part_native<'v>(a: MyFq12) -> MyFq12 {
@@ -14,7 +14,7 @@ pub fn easy_part_native<'v>(a: MyFq12) -> MyFq12 {
         divided.into()
     };
     let f3 = frobenius_map_native(f2, 2);
-    
+
     f3 * f2
 }
 
@@ -67,13 +67,13 @@ pub fn hard_part_native(r: Fq12) -> Fq12 {
     y1 = *y1.conjugate_in_place();
     y1 *= y2;
     y1 *= y0;
-    
+
     r * y1
 }
 
 pub fn final_exponentiation(a: MyFq12) -> Fq12 {
     let f0 = easy_part_native(a);
-    
+
     hard_part_native(f0.into())
 }
 
@@ -84,7 +84,9 @@ mod tests {
     use ark_ff::{Field, UniformRand};
 
     use crate::native::final_exponentiation::{
-        ark_easy_part, final_exponentiation, hard_part_native,
+        ark_easy_part,
+        final_exponentiation,
+        hard_part_native,
     };
 
     #[test]

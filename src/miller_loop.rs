@@ -3,7 +3,8 @@ use ark_ff::BitIteratorBE;
 use ark_std::cfg_chunks_mut;
 use num::One;
 use plonky2::{
-    field::extension::Extendable, hash::hash_types::RichField,
+    field::extension::Extendable,
+    hash::hash_types::RichField,
     plonk::circuit_builder::CircuitBuilder,
 };
 
@@ -73,7 +74,6 @@ fn ell_target<F: RichField + Extendable<D>, const D: usize>(
 
     let c2 = c2.mul_assign_by_fp(builder, py.clone());
     let c1 = c1.mul_assign_by_fp(builder, px.clone());
-    
 
     f.mul_by_014(builder, &c0, &c1, &c2)
 }
@@ -87,11 +87,13 @@ mod tests {
         field::goldilocks_field::GoldilocksField,
         iop::witness::PartialWitness,
         plonk::{
-            circuit_builder::CircuitBuilder, circuit_data::CircuitConfig,
+            circuit_builder::CircuitBuilder,
+            circuit_data::CircuitConfig,
             config::PoseidonGoldilocksConfig,
         },
     };
 
+    use super::ell_target;
     use crate::{
         curves::{
             g1::{G1AffineTarget, G1PreparedTarget},
@@ -101,8 +103,6 @@ mod tests {
         miller_loop::multi_miller_loop,
         native::miller_loop::ell,
     };
-
-    use super::ell_target;
 
     type F = GoldilocksField;
     type C = PoseidonGoldilocksConfig;

@@ -1,9 +1,9 @@
+use std::ops::Div;
+
 use ark_bls12_381::{Fq, Fq2};
 use ark_ff::{Field, Fp2};
 use itertools::Itertools;
-use num::BigUint;
-use num::{One, Zero};
-use std::ops::Div;
+use num::{BigUint, One, Zero};
 
 use crate::utils::helpers::MyFq12;
 

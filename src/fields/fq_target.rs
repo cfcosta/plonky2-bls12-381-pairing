@@ -1,3 +1,5 @@
+use std::marker::PhantomData;
+
 use ark_bls12_381::Fq;
 use itertools::Itertools;
 use num::{One, Zero};
@@ -18,7 +20,6 @@ use plonky2_ecdsa::gadgets::{
     nonnative::{CircuitBuilderNonNative, NonNativeTarget},
 };
 use plonky2_u32::gadgets::{arithmetic_u32::U32Target, range_check::range_check_u32_circuit};
-use std::marker::PhantomData;
 
 use crate::{
     fields::bls12_381base::Bls12_381Base,
@@ -87,12 +88,7 @@ impl<F: RichField + Extendable<D>, const D: usize> FqTarget<F, D> {
         builder.connect_nonnative(&lhs.target, &rhs.target);
     }
 
-    pub fn select(
-        builder: &mut CircuitBuilder<F, D>,
-        a: &Self,
-        b: &Self,
-        flag: &BoolTarget,
-    ) -> Self {
+    pub fn select(builder: &mut CircuitBuilder<F, D>, a: &Self, b: &Self, flag: &BoolTarget) -> Self {
         let s = builder.if_nonnative(*flag, &a.target, &b.target);
         Self {
             target: s,
@@ -349,22 +345,20 @@ impl<F: RichField + Extendable<D>, const D: usize> SimpleGenerator<F, D> for FqS
 mod tests {
     use ark_bls12_381::Fq;
     use ark_ff::Field;
-    use ark_std::UniformRand;
-    use ark_std::Zero;
-
+    use ark_std::{UniformRand, Zero};
     use plonky2::{
         field::{goldilocks_field::GoldilocksField, types::Field as Plonky2Field},
         iop::witness::{PartialWitness, WitnessWrite},
         plonk::{
-            circuit_builder::CircuitBuilder, circuit_data::CircuitConfig,
+            circuit_builder::CircuitBuilder,
+            circuit_data::CircuitConfig,
             config::PoseidonGoldilocksConfig,
         },
     };
     use rand::Rng;
 
-    use crate::utils::helpers::sgn0_fq;
-
     use super::FqTarget;
+    use crate::utils::helpers::sgn0_fq;
 
     type F = GoldilocksField;
     type C = PoseidonGoldilocksConfig;

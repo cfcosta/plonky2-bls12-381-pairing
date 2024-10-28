@@ -192,11 +192,10 @@ mod tests {
         },
     };
 
+    use super::G2ProjectiveTarget;
     use crate::{
         curves::g2::G2AffineTarget, fields::fq_target::FqTarget, native::miller_loop::G2Projective,
     };
-
-    use super::G2ProjectiveTarget;
 
     type F = GoldilocksField;
     type C = PoseidonGoldilocksConfig;
@@ -209,12 +208,12 @@ mod tests {
         let rng = &mut rand::thread_rng();
         let rand_g1_affine = G1Affine::rand(rng);
         let rand_x = rand_g1_affine.x().unwrap();
-        let rand_x_t = FqTarget::constant(&mut builder, *rand_x);
+        let rand_x_t = FqTarget::constant(&mut builder, rand_x);
 
         let rand_g2 = G2Projective::random();
         let mut rand_g2_t = G2ProjectiveTarget::constant(&mut builder, &rand_g2);
         let mut m_rand_g2 = rand_g2;
-        m_rand_g2.double_in_place(rand_x);
+        m_rand_g2.double_in_place(&rand_x);
         rand_g2_t.double_in_place(&mut builder, &rand_x_t);
 
         let expected_g2 = G2ProjectiveTarget::constant(&mut builder, &m_rand_g2);

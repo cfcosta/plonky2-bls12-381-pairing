@@ -1,11 +1,7 @@
 use ark_bls12_381::{Fq, Fq12, Fq2, G1Affine, G2Affine};
-use ark_ec::short_weierstrass::SWCurveConfig;
-use ark_ec::AffineRepr;
-use ark_ff::vec::IntoIter;
-use ark_ff::{AdditiveGroup, UniformRand};
-use ark_ff::{BitIteratorBE, Field};
-use ark_std::cfg_chunks_mut;
-use ark_std::One;
+use ark_ec::{short_weierstrass::SWCurveConfig, AffineRepr};
+use ark_ff::{vec::IntoIter, AdditiveGroup, BitIteratorBE, Field, UniformRand};
+use ark_std::{cfg_chunks_mut, One};
 
 use crate::utils::constants::{BLS_X, BLS_X_IS_NEGATIVE};
 
@@ -167,10 +163,7 @@ pub fn getter_of_prepared_pairs(
 ) -> Vec<(G1Prepared, IntoIter<(Fq2, Fq2, Fq2)>)> {
     use itertools::Itertools;
 
-    
-
-    a
-        .into_iter()
+    a.into_iter()
         .zip_eq(b)
         .filter_map(|(p, q)| {
             let (p, q) = (p.into(), q.into());

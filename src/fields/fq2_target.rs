@@ -400,9 +400,7 @@ struct Fq2SqrtGenerator<F: RichField + Extendable<D>, const D: usize> {
     sqrt: Fq2Target<F, D>,
 }
 
-impl<F: RichField + Extendable<D>, const D: usize> SimpleGenerator<F, D>
-    for Fq2SqrtGenerator<F, D>
-{
+impl<F: RichField + Extendable<D>, const D: usize> SimpleGenerator<F, D> for Fq2SqrtGenerator<F, D> {
     fn dependencies(&self) -> Vec<Target> {
         let mut x_vec = self
             .x
@@ -505,15 +503,15 @@ mod tests {
         field::{goldilocks_field::GoldilocksField, types::Field as plonky2_field},
         iop::witness::{PartialWitness, WitnessWrite},
         plonk::{
-            circuit_builder::CircuitBuilder, circuit_data::CircuitConfig,
+            circuit_builder::CircuitBuilder,
+            circuit_data::CircuitConfig,
             config::PoseidonGoldilocksConfig,
         },
     };
     use rand::Rng;
 
-    use crate::{fields::fq_target::FqTarget, utils::helpers::sgn0_fq2};
-
     use super::Fq2Target;
+    use crate::{fields::fq_target::FqTarget, utils::helpers::sgn0_fq2};
 
     type F = GoldilocksField;
     type C = PoseidonGoldilocksConfig;

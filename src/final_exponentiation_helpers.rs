@@ -1,13 +1,15 @@
+use std::ops::Div;
+
 use ark_bls12_381::{Fq, Fq2};
 use ark_ff::Field;
 use ark_std::Zero;
 use num::BigUint;
 use num_traits::One;
 use plonky2::{
-    field::extension::Extendable, hash::hash_types::RichField,
+    field::extension::Extendable,
+    hash::hash_types::RichField,
     plonk::circuit_builder::CircuitBuilder,
 };
-use std::ops::Div;
 
 use crate::fields::{fq12_target::Fq12Target, fq2_target::Fq2Target};
 

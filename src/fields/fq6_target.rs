@@ -18,9 +18,8 @@ use plonky2_ecdsa::gadgets::{
     nonnative::CircuitBuilderNonNative,
 };
 
-use crate::utils::{helpers::from_biguint_to_fq, my_fq6::MyFq6};
-
 use super::{fq2_target::Fq2Target, fq_target::FqTarget};
+use crate::utils::{helpers::from_biguint_to_fq, my_fq6::MyFq6};
 
 #[derive(Debug, Clone)]
 pub struct Fq6Target<F: RichField + Extendable<D>, const D: usize> {
@@ -50,12 +49,7 @@ impl<F: RichField + Extendable<D>, const D: usize> Fq6Target<F, D> {
         }
     }
 
-    pub fn select(
-        builder: &mut CircuitBuilder<F, D>,
-        a: &Self,
-        b: &Self,
-        flag: &BoolTarget,
-    ) -> Self {
+    pub fn select(builder: &mut CircuitBuilder<F, D>, a: &Self, b: &Self, flag: &BoolTarget) -> Self {
         let selected = a
             .coeffs
             .iter()
@@ -403,14 +397,14 @@ mod tests {
         field::goldilocks_field::GoldilocksField,
         iop::witness::PartialWitness,
         plonk::{
-            circuit_builder::CircuitBuilder, circuit_data::CircuitConfig,
+            circuit_builder::CircuitBuilder,
+            circuit_data::CircuitConfig,
             config::PoseidonGoldilocksConfig,
         },
     };
 
-    use crate::fields::fq2_target::Fq2Target;
-
     use super::Fq6Target;
+    use crate::fields::fq2_target::Fq2Target;
 
     type F = GoldilocksField;
     type C = PoseidonGoldilocksConfig;

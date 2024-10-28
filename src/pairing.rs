@@ -1,5 +1,6 @@
 use plonky2::{
-    field::extension::Extendable, hash::hash_types::RichField,
+    field::extension::Extendable,
+    hash::hash_types::RichField,
     plonk::circuit_builder::CircuitBuilder,
 };
 
@@ -28,11 +29,13 @@ mod tests {
         field::goldilocks_field::GoldilocksField,
         iop::witness::PartialWitness,
         plonk::{
-            circuit_builder::CircuitBuilder, circuit_data::CircuitConfig,
+            circuit_builder::CircuitBuilder,
+            circuit_data::CircuitConfig,
             config::PoseidonGoldilocksConfig,
         },
     };
 
+    use super::pairing;
     use crate::{
         curves::{
             g1::{G1AffineTarget, G1PreparedTarget},
@@ -40,8 +43,6 @@ mod tests {
         },
         fields::fq12_target::Fq12Target,
     };
-
-    use super::pairing;
 
     type F = GoldilocksField;
     type C = PoseidonGoldilocksConfig;

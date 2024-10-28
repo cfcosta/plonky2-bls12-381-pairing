@@ -1,5 +1,6 @@
 use plonky2::{
-    field::extension::Extendable, hash::hash_types::RichField,
+    field::extension::Extendable,
+    hash::hash_types::RichField,
     plonk::circuit_builder::CircuitBuilder,
 };
 
@@ -16,7 +17,7 @@ pub fn easy_part<F: RichField + Extendable<D>, const D: usize>(
     let f1 = a.conjugate(builder);
     let f2 = f1.div(builder, a);
     let f3 = frobenius_map(builder, &f2, 2);
-    
+
     f3.mul(builder, &f2)
 }
 
@@ -49,7 +50,6 @@ pub fn hard_part_target<F: RichField + Extendable<D>, const D: usize>(
     y1 = y1.conjugate(builder);
     y1 = y1.mul(builder, &y2);
     y1 = y1.mul(builder, &y0);
-    
 
     r.mul(builder, &y1)
 }
@@ -59,7 +59,7 @@ pub fn final_exponentiation<F: RichField + Extendable<D>, const D: usize>(
     a: Fq12Target<F, D>,
 ) -> Fq12Target<F, D> {
     let f0 = easy_part(builder, &a);
-    
+
     hard_part_target(builder, f0)
 }
 
@@ -74,7 +74,8 @@ mod tests {
         field::goldilocks_field::GoldilocksField,
         iop::witness::PartialWitness,
         plonk::{
-            circuit_builder::CircuitBuilder, circuit_data::CircuitConfig,
+            circuit_builder::CircuitBuilder,
+            circuit_data::CircuitConfig,
             config::PoseidonGoldilocksConfig,
         },
     };

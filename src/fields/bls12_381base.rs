@@ -1,15 +1,15 @@
-use core::fmt::{self, Debug, Display, Formatter};
-use core::hash::{Hash, Hasher};
-use core::iter::{Product, Sum};
-use core::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Neg, Sub, SubAssign};
+use core::{
+    fmt::{self, Debug, Display, Formatter},
+    hash::{Hash, Hasher},
+    iter::{Product, Sum},
+    ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Neg, Sub, SubAssign},
+};
 
 use ark_bls12_381::Fq;
 use itertools::Itertools;
-use num::bigint::BigUint;
-use num::{Integer, One};
-use serde::{Deserialize, Serialize};
-
+use num::{bigint::BigUint, Integer, One};
 use plonky2::field::types::{Field, PrimeField, Sample};
+use serde::{Deserialize, Serialize};
 
 /// The base field of the bls12-381 elliptic curve.
 ///
