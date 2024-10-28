@@ -116,7 +116,7 @@ mod tests {
         let p: BigUint = Fq::MODULUS.into();
         let r: BigUint = Fr::MODULUS.into();
         let exponent = (p.pow(12) - 1u32) / r;
-        let fixed_large_exponent = rand_x.pow(&exponent.to_u64_digits());
+        let fixed_large_exponent = rand_x.pow(exponent.to_u64_digits());
 
         assert_eq!(ark_final_exponentiation, fixed_large_exponent);
     }
@@ -134,7 +134,7 @@ mod tests {
         use ark_ff::PrimeField;
         let p: BigUint = Fq::MODULUS.into();
         let exponent = (p.pow(6) - 1u32) * (p.pow(2) + 1u32);
-        let fixed_large_exponent = rand_x.pow(&exponent.to_u64_digits());
+        let fixed_large_exponent = rand_x.pow(exponent.to_u64_digits());
 
         // Passes
         assert_eq!(ark_easy_part, fixed_large_exponent);
@@ -167,7 +167,7 @@ mod tests {
         assert_eq!(expected_hard_part, hard_part);
 
         // Fails
-        let expected_result = rand_x.pow(&hard_part.to_u64_digits());
+        let expected_result = rand_x.pow(hard_part.to_u64_digits());
         assert_eq!(ark_hard_part, expected_result);
     }
 }

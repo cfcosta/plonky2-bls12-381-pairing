@@ -363,8 +363,6 @@ mod tests {
             let x = builder.constant_nonnative(a);
             let y = builder.constant_nonnative(b);
             let z = builder.mul_nonnative(&x, &y);
-            let x_big = builder.nonnative_to_canonical_biguint(&x);
-            x_big.limbs;
             let expected_z = builder.constant_nonnative(a * b);
             builder.connect_nonnative(&z, &expected_z);
         }

@@ -314,7 +314,7 @@ impl<F: RichField + Extendable<D>, const D: usize> Fq2Target<F, D> {
         let sqrt = Self::empty(builder);
         builder.add_simple_generator(Fq2SqrtGenerator::<F, D> {
             x: self.clone(),
-            sgn: sgn,
+            sgn,
             sqrt: sqrt.clone(),
         });
 

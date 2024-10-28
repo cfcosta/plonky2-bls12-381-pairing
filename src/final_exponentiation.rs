@@ -96,7 +96,7 @@ mod tests {
         let output_expected = ark_bls12_381::Bls12_381::final_exponentiation(MillerLoopOutput(x))
             .unwrap()
             .0;
-        let output_expected_t = Fq12Target::constant(&mut builder, output_expected.into());
+        let output_expected_t = Fq12Target::constant(&mut builder, output_expected);
 
         Fq12Target::connect(&mut builder, &output, &output_expected_t);
 
