@@ -420,8 +420,7 @@ mod tests {
         let x: Fq6 = Fq6::rand(rng);
         let inv_x_expected = x.inverse().unwrap();
 
-        let mut config = CircuitConfig::standard_recursion_config();
-        config.num_wires = 300;
+        let config = CircuitConfig::wide_ecc_config();
         let mut builder = CircuitBuilder::<F, D>::new(config);
         let x_t = Fq6Target::constant(&mut builder, x);
         let inv_x_t = x_t.inv(&mut builder);
@@ -441,7 +440,7 @@ mod tests {
         let c0: Fq2 = Fq2::rand(rng);
         let c1: Fq2 = Fq2::rand(rng);
 
-        let config = CircuitConfig::standard_recursion_config();
+        let config = CircuitConfig::wide_ecc_config();
         let mut builder = CircuitBuilder::<F, D>::new(config);
         let x_t = Fq6Target::constant(&mut builder, x);
         let x_c0 = Fq2Target::constant(&mut builder, c0);
@@ -466,7 +465,7 @@ mod tests {
         let x: Fq6 = Fq6::rand(rng);
         let c1: Fq2 = Fq2::rand(rng);
 
-        let config = CircuitConfig::standard_recursion_config();
+        let config = CircuitConfig::wide_ecc_config();
         let mut builder = CircuitBuilder::<F, D>::new(config);
         let x_t = Fq6Target::constant(&mut builder, x);
         let x_c1 = Fq2Target::constant(&mut builder, c1);
@@ -489,7 +488,7 @@ mod tests {
         let rng = &mut rand::thread_rng();
         let x: Fq6 = Fq6::rand(rng);
 
-        let config = CircuitConfig::standard_recursion_config();
+        let config = CircuitConfig::wide_ecc_config();
         let mut builder = CircuitBuilder::<F, D>::new(config);
         let x_t = Fq6Target::constant(&mut builder, x);
         let mut x = x;

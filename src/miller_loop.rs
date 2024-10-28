@@ -108,8 +108,7 @@ mod tests {
 
     #[test]
     fn test_miller_loop_circuit() {
-        let mut config = CircuitConfig::standard_recursion_config();
-        config.num_wires = 300;
+        let config = CircuitConfig::wide_ecc_config();
         let mut builder = CircuitBuilder::<F, D>::new(config);
         let rng = &mut rand::thread_rng();
         let p = G1Affine::rand(rng);
@@ -133,7 +132,7 @@ mod tests {
 
     #[test]
     fn test_ell_target() {
-        let config = CircuitConfig::standard_recursion_config();
+        let config = CircuitConfig::wide_ecc_config();
         let mut builder = CircuitBuilder::<F, D>::new(config);
         let rng = &mut rand::thread_rng();
         let p = G1Affine::rand(rng);
