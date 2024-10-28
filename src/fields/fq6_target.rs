@@ -11,7 +11,7 @@ use plonky2::{
         witness::PartitionWitness,
     },
     plonk::circuit_builder::CircuitBuilder,
-    util::serialization::{Buffer, IoError},
+    util::serialization::Buffer,
 };
 use plonky2_ecdsa::gadgets::{
     biguint::{GeneratedValuesBigUint, WitnessBigUint},
@@ -73,7 +73,7 @@ impl<F: RichField + Extendable<D>, const D: usize> Fq6Target<F, D> {
         let coeffs = c
             .coeffs
             .iter()
-            .map(|x| FqTarget::constant(builder, x.clone()))
+            .map(|x| FqTarget::constant(builder, *x))
             .collect_vec()
             .try_into()
             .unwrap();
@@ -251,7 +251,7 @@ impl<F: RichField + Extendable<D>, const D: usize> Fq6Target<F, D> {
         let fq6_c2 = Fq2Target::new(vec![fq6_c20.clone(), fq6_c21.clone()]);
 
         let b_b = fq6_c1.clone();
-        let b_b = b_b.mul(builder, &c1);
+        let b_b = b_b.mul(builder, c1);
 
         let t1 = c1;
         let tmp = fq6_c1.clone();
@@ -317,7 +317,7 @@ impl<F: RichField + Extendable<D>, const D: usize> Fq6Target<F, D> {
         flag: &BoolTarget,
     ) -> Self {
         let muled = self.mul(builder, x);
-        Self::select(builder, &muled, &self, flag)
+        Self::select(builder, &muled, self, flag)
     }
 
     // pub fn div(&self, builder: &mut CircuitBuilder<F, D>, other: &Self) -> Self {

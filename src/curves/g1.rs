@@ -20,13 +20,13 @@ impl<F: RichField + Extendable<D>, const D: usize> G1AffineTarget<F, D> {
     }
 
     pub fn xy(&self) -> Option<(&self::FqTarget<F, D>, &self::FqTarget<F, D>)> {
-        (!self.infinity).then(|| (&self.x, &self.y))
+        (!self.infinity).then_some((&self.x, &self.y))
     }
 
     pub fn constant(builder: &mut CircuitBuilder<F, D>, g1: G1Affine) -> Self {
         Self {
-            x: FqTarget::constant(builder, g1.x().unwrap().clone()),
-            y: FqTarget::constant(builder, g1.y().unwrap().clone()),
+            x: FqTarget::constant(builder, g1.x().unwrap()),
+            y: FqTarget::constant(builder, g1.y().unwrap()),
             infinity: false,
         }
     }

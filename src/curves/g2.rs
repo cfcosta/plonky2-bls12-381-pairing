@@ -23,14 +23,14 @@ pub struct G2AffineTarget<F: RichField + Extendable<D>, const D: usize> {
 impl<F: RichField + Extendable<D>, const D: usize> G2AffineTarget<F, D> {
     pub fn constant(builder: &mut CircuitBuilder<F, D>, g2: G2Affine) -> Self {
         Self {
-            x: Fq2Target::constant(builder, g2.x().unwrap().clone()),
-            y: Fq2Target::constant(builder, g2.y().unwrap().clone()),
+            x: Fq2Target::constant(builder, g2.x().unwrap()),
+            y: Fq2Target::constant(builder, g2.y().unwrap()),
             infinity: false,
         }
     }
 
     fn xy(&self) -> Option<(&self::Fq2Target<F, D>, &self::Fq2Target<F, D>)> {
-        (!self.infinity).then(|| (&self.x, &self.y))
+        (!self.infinity).then_some((&self.x, &self.y))
     }
 }
 
@@ -121,8 +121,8 @@ impl<F: RichField + Extendable<D>, const D: usize> G2ProjectiveTarget<F, D> {
         let theta_mul_g_sub_h = theta.mul(builder, &g_sub_h);
         self.y = theta_mul_g_sub_h.sub(builder, &e_mul_y);
         self.z = self.z.mul(builder, &e);
-        let lambda_qy = lambda.mul(builder, &qy);
-        let theta_qx = theta.mul(builder, &qx);
+        let lambda_qy = lambda.mul(builder, qy);
+        let theta_qx = theta.mul(builder, qx);
         let j = theta_qx.sub(builder, &lambda_qy);
 
         (j, theta.neg(builder), lambda)

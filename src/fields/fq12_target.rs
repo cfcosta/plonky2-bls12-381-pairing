@@ -11,7 +11,7 @@ use plonky2::{
         witness::{PartitionWitness, WitnessWrite},
     },
     plonk::circuit_builder::CircuitBuilder,
-    util::serialization::{Buffer, IoError},
+    util::serialization::Buffer,
 };
 use plonky2_ecdsa::gadgets::{
     biguint::{GeneratedValuesBigUint, WitnessBigUint},
@@ -73,7 +73,7 @@ impl<F: RichField + Extendable<D>, const D: usize> Fq12Target<F, D> {
         let coeffs = c
             .coeffs
             .iter()
-            .map(|x| FqTarget::constant(builder, x.clone()))
+            .map(|x| FqTarget::constant(builder, *x))
             .collect_vec()
             .try_into()
             .unwrap();
@@ -329,7 +329,7 @@ impl<F: RichField + Extendable<D>, const D: usize> Fq12Target<F, D> {
         flag: &BoolTarget,
     ) -> Self {
         let muled = self.mul(builder, x);
-        Self::select(builder, &muled, &self, flag)
+        Self::select(builder, &muled, self, flag)
     }
 
     /// Iterates over the entire iterator, multiplying all the elements
@@ -440,7 +440,7 @@ impl<F: RichField + Extendable<D>, const D: usize> Fq12Target<F, D> {
     }
 
     pub fn set_witness<W: WitnessWrite<F>>(&self, pw: &mut W, value: &Fq12) {
-        let my_value: MyFq12 = value.clone().into();
+        let my_value: MyFq12 = (*value).into();
         self.coeffs
             .iter()
             .cloned()

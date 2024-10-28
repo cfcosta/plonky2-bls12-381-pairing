@@ -167,7 +167,9 @@ pub fn getter_of_prepared_pairs(
 ) -> Vec<(G1Prepared, IntoIter<(Fq2, Fq2, Fq2)>)> {
     use itertools::Itertools;
 
-    let pairs = a
+    
+
+    a
         .into_iter()
         .zip_eq(b)
         .filter_map(|(p, q)| {
@@ -177,9 +179,7 @@ pub fn getter_of_prepared_pairs(
                 false => None,
             }
         })
-        .collect::<Vec<_>>();
-
-    pairs
+        .collect::<Vec<_>>()
 }
 
 pub fn ell(f: &mut Fq12, g2_coeffs: EllCoeff, p: G1Affine) {

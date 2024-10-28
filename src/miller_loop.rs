@@ -73,9 +73,9 @@ fn ell_target<F: RichField + Extendable<D>, const D: usize>(
 
     let c2 = c2.mul_assign_by_fp(builder, py.clone());
     let c1 = c1.mul_assign_by_fp(builder, px.clone());
-    let f = f.mul_by_014(builder, &c0, &c1, &c2);
+    
 
-    f
+    f.mul_by_014(builder, &c0, &c1, &c2)
 }
 
 #[cfg(test)]

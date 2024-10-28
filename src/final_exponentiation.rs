@@ -14,10 +14,10 @@ pub fn easy_part<F: RichField + Extendable<D>, const D: usize>(
     a: &Fq12Target<F, D>,
 ) -> Fq12Target<F, D> {
     let f1 = a.conjugate(builder);
-    let f2 = f1.div(builder, &a);
+    let f2 = f1.div(builder, a);
     let f3 = frobenius_map(builder, &f2, 2);
-    let f = f3.mul(builder, &f2);
-    f
+    
+    f3.mul(builder, &f2)
 }
 
 pub fn hard_part_target<F: RichField + Extendable<D>, const D: usize>(
@@ -49,9 +49,9 @@ pub fn hard_part_target<F: RichField + Extendable<D>, const D: usize>(
     y1 = y1.conjugate(builder);
     y1 = y1.mul(builder, &y2);
     y1 = y1.mul(builder, &y0);
-    let r = r.mul(builder, &y1);
+    
 
-    r
+    r.mul(builder, &y1)
 }
 
 pub fn final_exponentiation<F: RichField + Extendable<D>, const D: usize>(
@@ -59,8 +59,8 @@ pub fn final_exponentiation<F: RichField + Extendable<D>, const D: usize>(
     a: Fq12Target<F, D>,
 ) -> Fq12Target<F, D> {
     let f0 = easy_part(builder, &a);
-    let f = hard_part_target(builder, f0);
-    f
+    
+    hard_part_target(builder, f0)
 }
 
 #[cfg(test)]

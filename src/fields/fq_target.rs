@@ -11,7 +11,7 @@ use plonky2::{
         witness::{PartitionWitness, Witness, WitnessWrite},
     },
     plonk::circuit_builder::CircuitBuilder,
-    util::serialization::{Buffer, IoError},
+    util::serialization::Buffer,
 };
 use plonky2_ecdsa::gadgets::{
     biguint::{BigUintTarget, GeneratedValuesBigUint, WitnessBigUint},
@@ -45,7 +45,7 @@ impl<F: RichField + Extendable<D>, const D: usize> FqTarget<F, D> {
     }
 
     pub fn from_limbs(builder: &mut CircuitBuilder<F, D>, limbs: &[Target; 8]) -> Self {
-        let limbs = limbs.map(|a| U32Target(a));
+        let limbs = limbs.map(U32Target);
         let biguint = BigUintTarget {
             limbs: limbs.to_vec(),
         };
@@ -93,7 +93,7 @@ impl<F: RichField + Extendable<D>, const D: usize> FqTarget<F, D> {
         b: &Self,
         flag: &BoolTarget,
     ) -> Self {
-        let s = builder.if_nonnative(flag.clone(), &a.target, &b.target);
+        let s = builder.if_nonnative(*flag, &a.target, &b.target);
         Self {
             target: s,
             _marker: PhantomData,
@@ -130,7 +130,7 @@ impl<F: RichField + Extendable<D>, const D: usize> FqTarget<F, D> {
     }
 
     pub fn from_bool(builder: &mut CircuitBuilder<F, D>, b: &BoolTarget) -> Self {
-        let target = builder.bool_to_nonnative::<Bls12_381Base>(&b);
+        let target = builder.bool_to_nonnative::<Bls12_381Base>(b);
         Self {
             target,
             _marker: PhantomData,
@@ -204,7 +204,7 @@ impl<F: RichField + Extendable<D>, const D: usize> FqTarget<F, D> {
         let sqrt = Self::empty(builder);
         builder.add_simple_generator(FqSqrtGenerator::<F, D> {
             x: self.clone(),
-            sgn: sgn.clone(),
+            sgn: sgn,
             sqrt: sqrt.clone(),
         });
 
@@ -267,7 +267,7 @@ impl<F: RichField + Extendable<D>, const D: usize> FqTarget<F, D> {
 
     pub fn from_vec(builder: &mut CircuitBuilder<F, D>, input: &[Target]) -> Self {
         assert_eq!(input.len(), 12);
-        let limbs = input.iter().cloned().map(|a| U32Target(a)).collect_vec();
+        let limbs = input.iter().cloned().map(U32Target).collect_vec();
         range_check_u32_circuit(builder, limbs.clone());
         let biguint = BigUintTarget { limbs };
         let target = builder.biguint_to_nonnative::<Bls12_381Base>(&biguint);
@@ -279,7 +279,7 @@ impl<F: RichField + Extendable<D>, const D: usize> FqTarget<F, D> {
 
     pub fn set_witness<W: WitnessWrite<F>>(&self, pw: &mut W, value: &Fq) {
         let limbs_t = self.to_limbs_without_pad().clone();
-        let value_b: BigUint = value.clone().into();
+        let value_b: BigUint = (*value).into();
         let mut limbs = value_b.to_u32_digits();
         // padding
         limbs.extend(vec![0; limbs_t.len() - limbs.len()]);

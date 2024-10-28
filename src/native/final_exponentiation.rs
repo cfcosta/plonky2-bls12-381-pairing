@@ -14,8 +14,8 @@ pub fn easy_part_native<'v>(a: MyFq12) -> MyFq12 {
         divided.into()
     };
     let f3 = frobenius_map_native(f2, 2);
-    let f = f3 * f2;
-    f
+    
+    f3 * f2
 }
 
 pub fn ark_easy_part(f: Fq12) -> Option<Fq12> {
@@ -48,33 +48,33 @@ pub fn hard_part_native(r: Fq12) -> Fq12 {
     let mut y2 = r;
     y2 = *y2.conjugate_in_place();
 
-    y1 = y1 * y2;
-    y2 = pow_native(y1.into(), vec![BLS_X].into()).into();
+    y1 *= y2;
+    y2 = pow_native(y1.into(), vec![BLS_X]).into();
     y2 = *y2.conjugate_in_place();
     y1 = *y1.conjugate_in_place();
-    y1 = y1 * y2;
-    y2 = pow_native(y1.into(), vec![BLS_X].into()).into();
+    y1 *= y2;
+    y2 = pow_native(y1.into(), vec![BLS_X]).into();
     y2 = *y2.conjugate_in_place();
     y1 = frobenius_map_native(y1.into(), 1).into();
-    y1 = y1 * y2;
+    y1 *= y2;
     let r = r * y0;
-    y0 = pow_native(y1.into(), vec![BLS_X].into()).into();
+    y0 = pow_native(y1.into(), vec![BLS_X]).into();
     y0 = *y0.conjugate_in_place();
-    y2 = pow_native(y0.into(), vec![BLS_X].into()).into();
+    y2 = pow_native(y0.into(), vec![BLS_X]).into();
     y2 = *y2.conjugate_in_place();
     y0 = y1;
     y0 = frobenius_map_native(y0.into(), 2).into();
     y1 = *y1.conjugate_in_place();
     y1 *= y2;
     y1 *= y0;
-    let r = r * y1;
-    r
+    
+    r * y1
 }
 
 pub fn final_exponentiation(a: MyFq12) -> Fq12 {
     let f0 = easy_part_native(a);
-    let f = hard_part_native(f0.into());
-    f
+    
+    hard_part_native(f0.into())
 }
 
 #[cfg(test)]

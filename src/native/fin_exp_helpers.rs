@@ -18,7 +18,7 @@ pub fn frobenius_map_native(a: MyFq12, power: usize) -> MyFq12 {
 
     for i in 0..6 {
         let frob_coeff = frob_coeffs(pow).pow([i as u64]);
-        let mut a_fp2 = Fq2::new(a.coeffs[i].clone(), a.coeffs[i + 6].clone());
+        let mut a_fp2 = Fq2::new(a.coeffs[i], a.coeffs[i + 6]);
         if pow % 2 != 0 {
             a_fp2 = conjugate_fp2(a_fp2);
         }
@@ -37,8 +37,8 @@ pub fn frobenius_map_native(a: MyFq12, power: usize) -> MyFq12 {
 
     let out_coeffs = out_fp2
         .iter()
-        .map(|x| x.c0.clone())
-        .chain(out_fp2.iter().map(|x| x.c1.clone()))
+        .map(|x| x.c0)
+        .chain(out_fp2.iter().map(|x| x.c1))
         .collect_vec();
 
     MyFq12 {
@@ -58,7 +58,7 @@ pub fn frob_coeffs(index: usize) -> Fq2 {
 }
 
 pub fn pow_native(a: MyFq12, exp: Vec<u64>) -> MyFq12 {
-    let mut res = a.clone();
+    let mut res = a;
     let mut is_started = false;
     let naf = get_naf(exp);
 
@@ -134,7 +134,7 @@ pub fn conjugate_fp12(a: MyFq12) -> MyFq12 {
         .coeffs
         .iter()
         .enumerate()
-        .map(|(i, c)| if i % 2 == 0 { c.clone() } else { -c.clone() })
+        .map(|(i, c)| if i % 2 == 0 { *c } else { -*c })
         .collect();
     MyFq12 {
         coeffs: coeffs.try_into().unwrap(),

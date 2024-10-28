@@ -13,7 +13,7 @@ use plonky2::{
         witness::{PartitionWitness, Witness, WitnessWrite},
     },
     plonk::circuit_builder::CircuitBuilder,
-    util::serialization::{Buffer, IoError},
+    util::serialization::Buffer,
 };
 use plonky2_ecdsa::gadgets::{
     biguint::{GeneratedValuesBigUint, WitnessBigUint},
@@ -85,7 +85,7 @@ impl<F: RichField + Extendable<D>, const D: usize> Fq2Target<F, D> {
     pub fn constant(builder: &mut CircuitBuilder<F, D>, c: Fq2) -> Self {
         let coeffs = [c.c0, c.c1]
             .iter()
-            .map(|x| FqTarget::constant(builder, x.clone()))
+            .map(|x| FqTarget::constant(builder, *x))
             .collect_vec()
             .try_into()
             .unwrap();
@@ -139,7 +139,7 @@ impl<F: RichField + Extendable<D>, const D: usize> Fq2Target<F, D> {
     }
 
     pub fn mul_scalar_const(&self, builder: &mut CircuitBuilder<F, D>, c: &Fq) -> Self {
-        let c = FqTarget::constant(builder, c.clone());
+        let c = FqTarget::constant(builder, *c);
         self.mul_scalar(builder, &c)
     }
 
@@ -217,11 +217,11 @@ impl<F: RichField + Extendable<D>, const D: usize> Fq2Target<F, D> {
     }
 
     pub fn simple_square(&self, builder: &mut CircuitBuilder<F, D>) -> Self {
-        self.mul(builder, &self)
+        self.mul(builder, self)
     }
 
     pub fn double(&self, builder: &mut CircuitBuilder<F, D>) -> Self {
-        self.add(builder, &self)
+        self.add(builder, self)
     }
 
     pub fn mul_assign_by_fp(
@@ -268,7 +268,7 @@ impl<F: RichField + Extendable<D>, const D: usize> Fq2Target<F, D> {
         let sgn_x = self.coeffs[0].sgn0(builder);
         let is_zero = self.coeffs[0].is_zero(builder);
         let sgn_y = self.coeffs[1].sgn0(builder);
-        let is_zero_and_sgn_y = builder.and(is_zero, sgn_y.clone());
+        let is_zero_and_sgn_y = builder.and(is_zero, sgn_y);
         builder.or(sgn_x, is_zero_and_sgn_y)
     }
 
@@ -314,7 +314,7 @@ impl<F: RichField + Extendable<D>, const D: usize> Fq2Target<F, D> {
         let sqrt = Self::empty(builder);
         builder.add_simple_generator(Fq2SqrtGenerator::<F, D> {
             x: self.clone(),
-            sgn: sgn.clone(),
+            sgn: sgn,
             sqrt: sqrt.clone(),
         });
 

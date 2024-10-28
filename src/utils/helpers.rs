@@ -132,7 +132,7 @@ impl Mul for MyFq12 {
                     - a0b1_plus_a1b0[i + 6];
                 out_coeffs.push(coeff);
             } else {
-                out_coeffs.push(a0b0_minus_a1b1[i].clone());
+                out_coeffs.push(a0b0_minus_a1b1[i]);
             }
         }
         for i in 0..6 {
@@ -142,7 +142,7 @@ impl Mul for MyFq12 {
                     + Fq::from(1) * a0b1_plus_a1b0[i + 6];
                 out_coeffs.push(coeff);
             } else {
-                out_coeffs.push(a0b1_plus_a1b0[i].clone());
+                out_coeffs.push(a0b1_plus_a1b0[i]);
             }
         }
         Self {
@@ -159,7 +159,7 @@ pub fn from_biguint_to_fq(x: BigUint) -> Fq {
 pub fn sgn0_fq(x: Fq) -> bool {
     let y: BigUint = x.into();
     let digits = y.to_u32_digits();
-    if digits.len() == 0 {
+    if digits.is_empty() {
         false
     } else {
         digits[0] & 1 == 1
@@ -174,7 +174,7 @@ pub fn sgn0_fq2(x: Fq2) -> bool {
 }
 
 pub fn pow_fq(a: Fq, exp: Vec<u64>) -> Fq {
-    let mut res = a.clone();
+    let mut res = a;
     let mut is_started = false;
     let naf = get_naf(exp);
     for &z in naf.iter().rev() {
