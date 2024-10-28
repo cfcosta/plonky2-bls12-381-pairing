@@ -88,7 +88,12 @@ impl<F: RichField + Extendable<D>, const D: usize> FqTarget<F, D> {
         builder.connect_nonnative(&lhs.target, &rhs.target);
     }
 
-    pub fn select(builder: &mut CircuitBuilder<F, D>, a: &Self, b: &Self, flag: &BoolTarget) -> Self {
+    pub fn select(
+        builder: &mut CircuitBuilder<F, D>,
+        a: &Self,
+        b: &Self,
+        flag: &BoolTarget,
+    ) -> Self {
         let s = builder.if_nonnative(*flag, &a.target, &b.target);
         Self {
             target: s,
@@ -350,8 +355,7 @@ mod tests {
         field::{goldilocks_field::GoldilocksField, types::Field as Plonky2Field},
         iop::witness::{PartialWitness, WitnessWrite},
         plonk::{
-            circuit_builder::CircuitBuilder,
-            circuit_data::CircuitConfig,
+            circuit_builder::CircuitBuilder, circuit_data::CircuitConfig,
             config::PoseidonGoldilocksConfig,
         },
     };

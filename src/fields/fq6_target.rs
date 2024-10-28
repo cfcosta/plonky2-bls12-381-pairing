@@ -49,7 +49,12 @@ impl<F: RichField + Extendable<D>, const D: usize> Fq6Target<F, D> {
         }
     }
 
-    pub fn select(builder: &mut CircuitBuilder<F, D>, a: &Self, b: &Self, flag: &BoolTarget) -> Self {
+    pub fn select(
+        builder: &mut CircuitBuilder<F, D>,
+        a: &Self,
+        b: &Self,
+        flag: &BoolTarget,
+    ) -> Self {
         let selected = a
             .coeffs
             .iter()
@@ -397,8 +402,7 @@ mod tests {
         field::goldilocks_field::GoldilocksField,
         iop::witness::PartialWitness,
         plonk::{
-            circuit_builder::CircuitBuilder,
-            circuit_data::CircuitConfig,
+            circuit_builder::CircuitBuilder, circuit_data::CircuitConfig,
             config::PoseidonGoldilocksConfig,
         },
     };
@@ -416,7 +420,8 @@ mod tests {
         let x: Fq6 = Fq6::rand(rng);
         let inv_x_expected = x.inverse().unwrap();
 
-        let config = CircuitConfig::standard_recursion_config();
+        let mut config = CircuitConfig::standard_recursion_config();
+        config.num_wires = 300;
         let mut builder = CircuitBuilder::<F, D>::new(config);
         let x_t = Fq6Target::constant(&mut builder, x);
         let inv_x_t = x_t.inv(&mut builder);

@@ -84,9 +84,7 @@ mod tests {
     use ark_ff::{Field, UniformRand};
 
     use crate::native::final_exponentiation::{
-        ark_easy_part,
-        final_exponentiation,
-        hard_part_native,
+        ark_easy_part, final_exponentiation, hard_part_native,
     };
 
     #[test]

@@ -400,7 +400,9 @@ struct Fq2SqrtGenerator<F: RichField + Extendable<D>, const D: usize> {
     sqrt: Fq2Target<F, D>,
 }
 
-impl<F: RichField + Extendable<D>, const D: usize> SimpleGenerator<F, D> for Fq2SqrtGenerator<F, D> {
+impl<F: RichField + Extendable<D>, const D: usize> SimpleGenerator<F, D>
+    for Fq2SqrtGenerator<F, D>
+{
     fn dependencies(&self) -> Vec<Target> {
         let mut x_vec = self
             .x
@@ -503,8 +505,7 @@ mod tests {
         field::{goldilocks_field::GoldilocksField, types::Field as plonky2_field},
         iop::witness::{PartialWitness, WitnessWrite},
         plonk::{
-            circuit_builder::CircuitBuilder,
-            circuit_data::CircuitConfig,
+            circuit_builder::CircuitBuilder, circuit_data::CircuitConfig,
             config::PoseidonGoldilocksConfig,
         },
     };
@@ -523,7 +524,8 @@ mod tests {
         let x: Fq2 = Fq2::rand(rng);
         let x_mul_w6: Fq2 = x * Fq2::new(Fq::from(1), Fq::ONE);
 
-        let config = CircuitConfig::standard_recursion_config();
+        let mut config = CircuitConfig::standard_recursion_config();
+        config.num_wires = 300;
         let mut builder = CircuitBuilder::<F, D>::new(config);
         let x_mul_w6_expected = Fq2Target::constant(&mut builder, x_mul_w6);
         let x_t = Fq2Target::constant(&mut builder, x);

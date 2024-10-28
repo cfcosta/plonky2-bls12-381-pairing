@@ -49,7 +49,12 @@ impl<F: RichField + Extendable<D>, const D: usize> Fq12Target<F, D> {
         }
     }
 
-    pub fn select(builder: &mut CircuitBuilder<F, D>, a: &Self, b: &Self, flag: &BoolTarget) -> Self {
+    pub fn select(
+        builder: &mut CircuitBuilder<F, D>,
+        a: &Self,
+        b: &Self,
+        flag: &BoolTarget,
+    ) -> Self {
         let selected = a
             .coeffs
             .iter()
@@ -454,8 +459,7 @@ mod tests {
         field::goldilocks_field::GoldilocksField,
         iop::witness::PartialWitness,
         plonk::{
-            circuit_builder::CircuitBuilder,
-            circuit_data::CircuitConfig,
+            circuit_builder::CircuitBuilder, circuit_data::CircuitConfig,
             config::PoseidonGoldilocksConfig,
         },
     };
@@ -471,7 +475,8 @@ mod tests {
     fn test_from_to_vec() {
         let rng = &mut rand::thread_rng();
         let a = Fq12::rand(rng);
-        let config = CircuitConfig::standard_recursion_config();
+        let mut config = CircuitConfig::standard_recursion_config();
+        config.num_wires = 300;
         let mut builder = CircuitBuilder::<F, D>::new(config);
         let a_t = Fq12Target::constant(&mut builder, a);
 

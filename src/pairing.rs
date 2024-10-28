@@ -1,6 +1,5 @@
 use plonky2::{
-    field::extension::Extendable,
-    hash::hash_types::RichField,
+    field::extension::Extendable, hash::hash_types::RichField,
     plonk::circuit_builder::CircuitBuilder,
 };
 
@@ -29,8 +28,7 @@ mod tests {
         field::goldilocks_field::GoldilocksField,
         iop::witness::PartialWitness,
         plonk::{
-            circuit_builder::CircuitBuilder,
-            circuit_data::CircuitConfig,
+            circuit_builder::CircuitBuilder, circuit_data::CircuitConfig,
             config::PoseidonGoldilocksConfig,
         },
     };
@@ -50,7 +48,8 @@ mod tests {
 
     #[test]
     fn test_pairing_circuit() {
-        let config = CircuitConfig::standard_recursion_config();
+        let mut config = CircuitConfig::standard_recursion_config();
+        config.num_wires = 300;
         let mut builder = CircuitBuilder::<F, D>::new(config);
         let rng = &mut rand::thread_rng();
         let p = G1Affine::rand(rng);

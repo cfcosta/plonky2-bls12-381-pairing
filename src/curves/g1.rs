@@ -1,8 +1,7 @@
 use ark_bls12_381::G1Affine;
 use ark_ec::AffineRepr;
 use plonky2::{
-    field::extension::Extendable,
-    hash::hash_types::RichField,
+    field::extension::Extendable, hash::hash_types::RichField,
     plonk::circuit_builder::CircuitBuilder,
 };
 
